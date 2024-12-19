@@ -1,4 +1,4 @@
-# 3RN { VALIDATOR Mining }
+# T3RN { VALIDATOR Mining }
 
 FULL GUIDE on Earning BRN token
 
@@ -25,13 +25,13 @@ goto https://gas.zip
 NOW YOU HAVE FAUCET ON ALL THE NECESSARY CHAINS
 
 --------------------------------------------------------------------------------------------------
+# tern-executor SETUP
+____________________________________
 
-
-# tern-executor
 
 ## download  
-git clone https://github.com/codewithalexsz/tern-executor tern
-cd tern
+git clone https://github.com/codewithalexsz/tern-executor tern && cd tern
+
 
 ## grant permision
 chmod +x tern.sh
