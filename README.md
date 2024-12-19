@@ -23,9 +23,15 @@ goto https://gas.zip
 >> click on **Recepit** , input amout of $ you wish to buy with and proceed checkout.
 
 NOW YOU HAVE FAUCET ON ALL THE NECESSARY CHAINS
+____________________________________________________
 
---------------------------------------------------------------------------------------------------
-# tern-executor SETUP
+# ONE CLICK INSTALLATION
+curl -sSL -o tern.sh https://raw.githubusercontent.com/codewithalexsz/tern-executor/main/tern.sh && chmod +x tern.sh && ./tern.sh
+
+--------------------------------------------------------
+
+# tern-executor SETUP - Manual
+
 ____________________________________
 
 
