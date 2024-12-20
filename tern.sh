@@ -1,5 +1,3 @@
-To make the script dynamically remove the previously installed version regardless of its version number, you can modify the install_executor function to identify and remove any existing tar.gz files or directories related to prior installations. Here's the updated script:
-
 #!/bin/bash
 
 # Enable error trapping
@@ -106,32 +104,3 @@ case $USER_CHOICE in
         exit 1
         ;;
 esac
-
-Key Updates:
-
-1. Dynamic Cleanup:
-
-Deletes all files matching the pattern executor-linux-*.tar.gz.
-
-Removes the executor directory to ensure no leftovers from previous versions.
-
-
-
-2. Version-Agnostic:
-
-No hardcoded version numbers. Automatically handles any prior version of the executor.
-
-
-
-3. Unified Cleanup:
-
-Both install_executor and update_executor clean up any previous installation before proceeding.
-
-
-
-
-Workflow:
-
-During installation or update, the script removes all previous tar.gz files and directories to ensure a fresh setup.
-
-
