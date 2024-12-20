@@ -20,15 +20,15 @@ trap 'handle_error' ERR
 
 # Function to install the Tern Executor
 install_executor() {
-    # Check if any existing tar.gz files or extracted directories exist and remove them
     echo "Cleaning up previous installations..."
     rm -rf executor-linux-*.tar.gz executor
 
     # Get the latest release tag from GitHub
+    echo "Fetching the latest release..."
     LATEST_RELEASE=$(curl -s https://api.github.com/repos/t3rn/executor-release/releases/latest | grep "tag_name" | awk -F '"' '{print $4}')
     echo "Latest release found: $LATEST_RELEASE"
 
-    # Download the new tar.gz file
+    # Download the latest tar.gz file
     run_with_delay wget https://github.com/t3rn/executor-release/releases/download/$LATEST_RELEASE/executor-linux-$LATEST_RELEASE.tar.gz
 
     # Extract the tar.gz file
@@ -57,13 +57,17 @@ install_executor() {
 
 # Function to start the executor
 start_executor() {
-    cd executor/executor/bin || exit
-    ./executor
+    if [ -d "executor/executor/bin" ]; then
+        cd executor/executor/bin || exit
+        ./executor
+    else
+        echo "Executor is not installed. Please install it first using Option 1."
+    fi
 }
 
 # Function to update to the latest release
 update_executor() {
-    echo "Checking for the latest release..."
+    echo "Fetching the latest release..."
 
     # Get the latest release tag from GitHub
     LATEST_RELEASE=$(curl -s https://api.github.com/repos/t3rn/executor-release/releases/latest | grep "tag_name" | awk -F '"' '{print $4}')
