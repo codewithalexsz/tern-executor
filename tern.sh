@@ -18,6 +18,18 @@ handle_error() {
 # Trap errors and execute the handle_error function
 trap 'handle_error' ERR
 
+# Function to set environment variables
+set_environment_variables() {
+    run_with_delay export EXECUTOR_MAX_L3_GAS_PRICE=250
+    run_with_delay export NODE_ENV=testnet
+    run_with_delay export LOG_LEVEL=debug
+    run_with_delay export LOG_PRETTY=false
+    run_with_delay export EXECUTOR_PROCESS_ORDERS=true
+    run_with_delay export EXECUTOR_PROCESS_CLAIMS=true
+    run_with_delay export ENABLED_NETWORKS='arbitrum-sepolia,base-sepolia,optimism-sepolia,l1rn'
+    run_with_delay export EXECUTOR_PROCESS_PENDING_ORDERS_FROM_API=false
+}
+
 # Function to get the latest release and the immediate previous release
 fetch_releases() {
     echo "Fetching releases from GitHub..."
@@ -48,6 +60,11 @@ install_executor() {
     run_with_delay wget https://github.com/t3rn/executor-release/releases/download/$SELECTED_RELEASE/executor-linux-$SELECTED_RELEASE.tar.gz
     run_with_delay tar -xvzf executor-linux-$SELECTED_RELEASE.tar.gz
 
+    cd executor/executor/bin || exit
+
+    echo "Setting up environment variables..."
+    set_environment_variables
+
     echo -e "\033[1;32mInstallation completed for $SELECTED_RELEASE.\033[0m"
     sleep 3
     main_menu
@@ -58,6 +75,20 @@ change_private_key() {
     read -p "Enter your new private key: " PRIVATE_KEY_LOCAL
     export PRIVATE_KEY_LOCAL=$PRIVATE_KEY_LOCAL
     echo -e "\033[1;32mPrivate key updated successfully.\033[0m"
+    sleep 3
+    main_menu
+}
+
+# Function to edit EXECUTOR_MAX_L3_GAS_PRICE
+edit_max_l3_gas_price() {
+    echo -e "\033[1;34mDefault is 10. For optimum transactions, set between 100-300.\033[0m"
+    read -p "Enter the new value for EXECUTOR_MAX_L3_GAS_PRICE: " NEW_GAS_PRICE
+    if [[ $NEW_GAS_PRICE =~ ^[0-9]+$ ]] && [ "$NEW_GAS_PRICE" -ge 10 ]; then
+        export EXECUTOR_MAX_L3_GAS_PRICE=$NEW_GAS_PRICE
+        echo -e "\033[1;32mEXECUTOR_MAX_L3_GAS_PRICE updated to $NEW_GAS_PRICE.\033[0m"
+    else
+        echo -e "\033[1;31mInvalid input. Please enter a valid number (10 or higher).\033[0m"
+    fi
     sleep 3
     main_menu
 }
@@ -95,15 +126,17 @@ main_menu() {
     echo "2) Change Private Key"
     echo "3) Start Executor"
     echo "4) Check Update"
-    echo "5) Exit"
-    read -p "Enter your choice (1-5): " USER_CHOICE
+    echo "5) Edit EXECUTOR_MAX_L3_GAS_PRICE"
+    echo "6) Exit"
+    read -p "Enter your choice (1-6): " USER_CHOICE
 
     case $USER_CHOICE in
         1) install_executor ;;
         2) change_private_key ;;
         3) start_executor ;;
         4) check_update ;;
-        5) echo -e "\033[1;32mExiting script. Goodbye!\033[0m"; exit 0 ;;
+        5) edit_max_l3_gas_price ;;
+        6) echo -e "\033[1;32mExiting script. Goodbye!\033[0m"; exit 0 ;;
         *) echo -e "\033[1;31mInvalid choice. Please try again.\033[0m"; sleep 2; main_menu ;;
     esac
 }
